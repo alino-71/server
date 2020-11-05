@@ -1420,6 +1420,16 @@ doesnotexist:-o-prefocus, .strengthify-wrapper {
 		grid-column-gap: 20px;
 		grid-auto-rows: minmax(60px, max-content);
 
+		.update-main-groups {
+			padding: 10px 20px;
+			display: flex;
+			align-items: center;
+
+			button {
+				margin: 0px 10px;
+			}
+		}
+
 		.row {
 			// TODO replace with css4 subgrid when available
 			// fallback for ie11 no grid
@@ -1433,6 +1443,7 @@ doesnotexist:-o-prefocus, .strengthify-wrapper {
 			   what follows will be manually defined  */
 			grid-template-columns:
 					44px
+					44px
 					minmax($grid-col-min-width + 30px, 1fr) // username, displayname
 					minmax($grid-col-min-width, 1fr) // main groups
 					minmax($grid-col-min-width, 1fr) // password
@@ -1444,6 +1455,10 @@ doesnotexist:-o-prefocus, .strengthify-wrapper {
 
 			&.disabled {
 				opacity: .5;
+			}
+
+			.selection {
+				padding: 10px;
 			}
 
 			/* grid col width */

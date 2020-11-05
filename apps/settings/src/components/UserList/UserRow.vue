@@ -57,8 +57,10 @@
 		:user-actions="userActions"
 		:user="user"
 		:class="{'row--menu-opened': openedMenu}"
+		:selected="selected"
 		@hideMenu="hideMenu"
-		@toggleMenu="toggleMenu" />
+		@toggleMenu="toggleMenu"
+		@toggleSelect="toggleSelect" />
 	<div v-else
 		:class="{
 			'disabled': loading.delete || loading.disable,
@@ -66,6 +68,7 @@
 		}"
 		:data-id="user.id"
 		class="row row--editable">
+		<div />
 		<div :class="{'icon-loading-small': loading.delete || loading.disable || loading.wipe}"
 			class="avatar">
 			<img v-if="!loading.delete && !loading.disable && !loading.wipe"
@@ -105,6 +108,8 @@
 				</div>
 			</div>
 		</div>
+
+		<div />
 		<form v-if="settings.canChangePassword && user.backendCapabilities.setPassword"
 			:class="{'icon-loading-small': loading.password}"
 			class="password"
@@ -301,6 +306,10 @@ export default {
 		externalActions: {
 			type: Array,
 			default: () => [],
+		},
+		selected: {
+			type: Boolean,
+			required: true,
 		},
 	},
 	data() {
@@ -678,6 +687,14 @@ export default {
 					}
 					this.loading.all = false
 				})
+		},
+
+		/**
+		 * SELECT HANDLING
+		 * @param {Object} user Selected user info
+		 */
+		toggleSelect(user) {
+			this.$emit('toggleSelect', user)
 		},
 
 	},

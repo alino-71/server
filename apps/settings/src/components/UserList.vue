@@ -29,6 +29,7 @@
 			class="row"
 			@submit.prevent="createUser">
 			<div :class="loading.all?'icon-loading-small':'icon-add'" />
+			<div />
 			<div class="name">
 				<input id="newusername"
 					ref="newusername"
@@ -161,7 +162,25 @@
 				</div>
 			</div>
 		</form>
-		<div id="grid-header"
+		<div v-if="selectedUsers.length > 0" class="update-main-groups">
+			<Multiselect v-model="selectedGroups"
+				:close-on-select="false"
+				:multiple="true"
+				:options="canAddGroups"
+				:placeholder="t('settings', 'Add user\'s main groups')"
+				:tag-width="80"
+				:disabled="loading.groups || loading.all"
+				class="multiselect-vue"
+				label="name"
+				track-by="id">
+				<span slot="noResult">{{ t('settings', 'No results') }}</span>
+			</Multiselect>
+			<button class="btn primary" @click="addUsersGroups">
+				{{ t('settings', 'Add') }}
+			</button>
+		</div>
+		<div v-else
+			id="grid-header"
 			:class="{'sticky': scrolled && !showConfig.showNewUserForm}"
 			class="row">
 			<div id="headerAvatar" class="avatar" />
@@ -172,6 +191,7 @@
 					{{ t('settings', 'Display name') }}
 				</div>
 			</div>
+			<div />
 			<div id="headerMainGroups" class="main-groups">
 				{{ t('settings', 'Main Groups') }}
 			</div>
@@ -225,7 +245,10 @@
 			:settings="settings"
 			:show-config="showConfig"
 			:sub-admins-groups="subAdminsGroups"
-			:user="user" />
+			:user="user"
+			:selected="!!selectedUsers.find(u => u.id === user.id)"
+			@toggleSelect="toggleSelectedUsers" />
+
 		<InfiniteLoading ref="infiniteLoading" @infinite="infiniteHandler">
 			<div slot="spinner">
 				<div class="users-icon-loading icon-loading" />
@@ -309,6 +332,8 @@ export default {
 			scrolled: false,
 			searchQuery: '',
 			newUser: Object.assign({}, newUser),
+			selectedGroups: [],
+			selectedUsers: [],
 		}
 	},
 	computed: {
@@ -572,6 +597,37 @@ export default {
 		},
 		onClose() {
 			this.showConfig.showNewUserForm = false
+		},
+
+		/**
+		 * Select multiple users and change their main groups
+		 * @param {Object} user Selected user info
+		 */
+		toggleSelectedUsers(user) {
+			if (this.selectedUsers.find(u => u.id === user.id)) {
+				this.selectedUsers = this.selectedUsers.filter(u => u.id !== user.id)
+			} else {
+				this.selectedUsers.push(user)
+			}
+		},
+		addUsersGroups: function() {
+			this.loading.groups = true
+			this.selectedUsers.forEach((user) => {
+				this.selectedGroups.forEach(async(group) => {
+					if (!group.canAdd || user.groups.includes(group.id)) return
+
+					try {
+						await this.$store.dispatch('addUserGroup', { userid: user.id, gid: group.id })
+					} catch (error) {
+						// TODO: Log error
+					}
+				})
+			})
+
+			this.selectedGroups.splice(0)
+			this.selectedUsers.splice(0)
+
+			this.loading.groups = false
 		},
 	},
 }
