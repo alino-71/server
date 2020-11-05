@@ -20,6 +20,9 @@
 				</div>
 			</div>
 		</div>
+		<div class="main-groups">
+			{{ userMainGroupsLabels }}
+		</div>
 		<div />
 		<div class="mailAddress">
 			<div v-tooltip="user.email !== null && user.email.length > 20 ? user.email : ''" class="cellText">
@@ -139,6 +142,12 @@ export default {
 				.map(group => group.name)
 				.join(', ')
 		},
+		userMainGroupsLabels() {
+			return this.userGroups
+				.map(g => g.name)
+				.filter(g => ['active', 'guest', 'local'].includes(g))
+				.join(', ')
+		},
 		userSubAdminsGroupsLabels() {
 			return this.userSubAdminsGroups
 				.map(group => group.name)
@@ -179,7 +188,7 @@ export default {
 		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;
-}
+	}
 	.icon-more {
 		background-color: var(--color-main-background);
 		border: 0;

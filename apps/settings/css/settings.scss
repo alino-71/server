@@ -1434,6 +1434,7 @@ doesnotexist:-o-prefocus, .strengthify-wrapper {
 			grid-template-columns:
 					44px
 					minmax($grid-col-min-width + 30px, 1fr) // username, displayname
+					minmax($grid-col-min-width, 1fr) // main groups
 					minmax($grid-col-min-width, 1fr) // password
 					minmax($grid-col-min-width, 1fr) // email
 					minmax(1.5*$grid-col-min-width, 1fr) // groups
@@ -1447,6 +1448,7 @@ doesnotexist:-o-prefocus, .strengthify-wrapper {
 
 			/* grid col width */
 			.name,
+			.main-groups,
 			.password,
 			.mailAddress,
 			.languages,
@@ -1541,6 +1543,7 @@ doesnotexist:-o-prefocus, .strengthify-wrapper {
 				border-bottom-width: thin;
 
 				#headerDisplayName,
+				#headerMainGroups,
 				#headerPassword,
 				#headerAddress,
 				#headerGroups,

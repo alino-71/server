@@ -172,6 +172,9 @@
 					{{ t('settings', 'Display name') }}
 				</div>
 			</div>
+			<div id="headerMainGroups" class="main-groups">
+				{{ t('settings', 'Main Groups') }}
+			</div>
 			<div id="headerPassword" class="password">
 				{{ t('settings', 'Password') }}
 			</div>
@@ -526,16 +529,11 @@ export default {
 				})
 		},
 		setNewUserDefaultGroup(value) {
-			if (value && value.length > 0) {
-				// setting new user default group to the current selected one
-				const currentGroup = this.groups.find(group => group.id === value)
-				if (currentGroup) {
-					this.newUser.groups = [currentGroup]
-					return
-				}
-			}
-			// fallback, empty selected group
-			this.newUser.groups = []
+			const currentGroups = this
+				.groups
+				.filter(group => (value && value.length > 0 && group.id === value) || group.id === 'local')
+
+			this.newUser.groups = currentGroups
 		},
 
 		/**

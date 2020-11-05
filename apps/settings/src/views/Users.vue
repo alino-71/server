@@ -85,7 +85,7 @@
 					</AppNavigationCounter>
 					<template slot="actions">
 						<ActionButton
-							v-if="group.id !== 'admin' && group.id !== 'disabled' && settings.isAdmin"
+							v-if="!['admin', 'active', 'local', 'guest'].includes(group.id) && group.id !== 'disabled' && settings.isAdmin"
 							icon="icon-delete"
 							@click="removeGroup(group.id)">
 							{{ t('settings', 'Remove group') }}
