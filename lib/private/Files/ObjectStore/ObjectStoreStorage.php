@@ -523,4 +523,19 @@ class ObjectStoreStorage extends \OC\Files\Storage\Common {
 	public function getObjectStore(): IObjectStore {
 		return $this->objectStore;
 	}
+
+	public function copy($from, $to) {
+		$from = $this->normalizePath($from);
+		$to = $this->normalizePath($to);
+
+		$cache = $this->getCache();
+		$sourceEntry = $cache->get($from);
+		if (!$sourceEntry) {
+			throw new NotFoundException('Source object not found');
+		}
+
+		$this->objectStore->copyObject($from, $to);;
+
+		$cache->copyFromCache($cache, $sourceEntry, $to);
+	}
 }
