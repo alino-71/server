@@ -151,7 +151,10 @@ class FunctionBuilderTest extends TestCase {
 			->where($query->expr()->eq('appid', $query->createNamedParameter('minmax')))
 			->setMaxResults(1);
 
-		$this->assertEquals(null, $query->execute()->fetchColumn());
+		$result = $query->execute();
+		$row = $result->fetchColumn();
+		$result->closeCursor();
+		$this->assertEquals(null, $row);
 	}
 
 	public function testMinEmpty() {
@@ -164,7 +167,10 @@ class FunctionBuilderTest extends TestCase {
 			->where($query->expr()->eq('appid', $query->createNamedParameter('minmax')))
 			->setMaxResults(1);
 
-		$this->assertEquals(null, $query->execute()->fetchColumn());
+		$result = $query->execute();
+		$row = $result->fetchColumn();
+		$result->closeCursor();
+		$this->assertEquals(null, $row);
 	}
 
 	public function testMax() {
@@ -180,7 +186,10 @@ class FunctionBuilderTest extends TestCase {
 			->where($query->expr()->eq('appid', $query->createNamedParameter('minmax')))
 			->setMaxResults(1);
 
-		$this->assertEquals(20, $query->execute()->fetchColumn());
+		$result = $query->execute();
+		$row = $result->fetchColumn();
+		$result->closeCursor();
+		$this->assertEquals(20, $row);
 	}
 
 	public function testMin() {
@@ -196,7 +205,10 @@ class FunctionBuilderTest extends TestCase {
 			->where($query->expr()->eq('appid', $query->createNamedParameter('minmax')))
 			->setMaxResults(1);
 
-		$this->assertEquals(10, $query->execute()->fetchColumn());
+		$result = $query->execute();
+		$row = $result->fetchColumn();
+		$result->closeCursor();
+		$this->assertEquals(10, $row);
 	}
 
 	public function testGreatest() {
@@ -206,7 +218,10 @@ class FunctionBuilderTest extends TestCase {
 		$query->from('appconfig')
 			->setMaxResults(1);
 
-		$this->assertEquals(2, $query->execute()->fetchColumn());
+		$result = $query->execute();
+		$row = $result->fetchColumn();
+		$result->closeCursor();
+		$this->assertEquals(2, $row);
 	}
 
 	public function testLeast() {
@@ -216,6 +231,9 @@ class FunctionBuilderTest extends TestCase {
 		$query->from('appconfig')
 			->setMaxResults(1);
 
-		$this->assertEquals(1, $query->execute()->fetchColumn());
+		$result = $query->execute();
+		$row = $result->fetchColumn();
+		$result->closeCursor();
+		$this->assertEquals(1, $row);
 	}
 }
