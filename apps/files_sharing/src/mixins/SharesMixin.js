@@ -48,6 +48,8 @@ export default {
 		return {
 			config: new Config(),
 
+			locale: 'en',
+
 			// errors helpers
 			errors: {},
 
@@ -132,9 +134,31 @@ export default {
 			return this.share && this.share.owner === getCurrentUser().uid
 		},
 
+		/**
+		 * Return format of date depends on current locale
+		 * @returns {string}
+		 */
+		dateFormat() {
+			return ['fa', 'fa_ir'].includes(this.locale) ? 'jYYYY-jMM-jDD' : 'YYYY-MM-DD'
+		},
+
+	},
+
+	mounted() {
+		this.locale = String(OC.getLocale()).toLowerCase()
 	},
 
 	methods: {
+		// Return state of day for persian-datepicker
+		disabledDays(formatted, dateMoment, checkingFor) {
+			return dateMoment.isSameOrBefore(new Date(), 'day')
+		},
+
+		// Convert persian numbers to en numbers
+		faNumbersToEn(text) {
+			return String(text).replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d))
+		},
+
 		/**
 		 * Check if a share is valid before
 		 * firing the request
